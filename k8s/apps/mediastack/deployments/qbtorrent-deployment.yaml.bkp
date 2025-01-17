@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbtorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbtorrent
+  template:
+    metadata:
+      labels:
+        app: qbtorrent
+    spec:
+      volumes:
+        - name: qbtorrent-config
+          persistentVolumeClaim:
+            claimName: qbtorrent-config
+        - name: qbtorrent-data
+          persistentVolumeClaim:    
+            claimName: qbtorrent-data
+      containers:
+        - name: qbtorrent
+          image: linuxserver/qbittorrent:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: qbtorrent-config
+              mountPath: /config
+            - name: qbtorrent-data
+              mountPath: /downloads

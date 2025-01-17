@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbtorrent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: qbtorrent
+  template:
+    metadata:
+      labels:
+        app: qbtorrent
+    spec:
+      volumes:
+        - name: qbtorrent-config
+          persistentVolumeClaim:
+            claimName: qbtorrent-config
+        - name: radarr-movies
+          persistentVolumeClaim:
+            claimName: radarr-data
+        - name: sonarr-tvshows
+          persistentVolumeClaim:
+            claimName: sonarr-data
+        - name: qbtorrent-cfg
+          configMap:
+            name: qbtorrent-config
+      containers:
+        - name: qbtorrent
+          image: linuxserver/qbittorrent:latest
+          envFrom:
+            - configMapRef:
+                name: qbtorrent-config
+                optional: false
+          ports:
+            - containerPort: 8080
+              name: web-ui
+              protocol: TCP
+            - containerPort: 6881
+              name: torrent-tcp
+              protocol: TCP
+            - containerPort: 6881
+              name: torrent-udp
+              protocol: UDP
+          volumeMounts:
+            - name: qbtorrent-config
+              mountPath: /config
+            - name: radarr-movies
+              mountPath: /Movies
+            - name: sonarr-tvshows
+              mountPath: "/TV Shows"
+            - name: qbtorrent-cfg
+              mountPath: /config/qBittorrent/qBittorrent.conf
+              subPath: qBittorrent.conf
+

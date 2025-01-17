@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbtorrent-config
+  namespace: mediastack
+data:
+  qBittorrent.conf: |
+    [Preferences]
+    WebUI\Username=admin
+    WebUI\Password=adminadmin
+    WebUI\Port=8080
+    WebUI\HostHeaderValidation=false
