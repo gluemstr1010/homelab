@@ -4,4 +4,4 @@ metadata:
   name: local-path-class
   namespace: local-path-storage
 provisioner: rancher.io/local-path
-volumeBindingMode: WaitForFirstConsumer
+volumeBindingMode: Immediate

@@ -50,6 +50,6 @@ spec:
             - name: sonarr-tvshows
               mountPath: "/TV Shows"
             - name: qbtorrent-cfg
-              mountPath: /config/qBittorrent/qBittorrent.conf
+              mountPath: /config/qBittorrent.conf
               subPath: qBittorrent.conf
 

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: qbtorrent-config
-  namespace: mediastack
+  namespace: media
 data:
   qBittorrent.conf: |
     [Preferences]

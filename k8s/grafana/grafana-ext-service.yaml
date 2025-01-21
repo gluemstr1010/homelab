@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: grafana-external
   labels:
-    app: grafana-app
+    app: grafana
 spec:
   type: NodePort
   selector:
-    app: grafana-app
+    app: grafana
   ports:
   - protocol: TCP
     port: 3000
