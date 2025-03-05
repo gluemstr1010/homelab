@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: qbtorrent-external
   labels:
-    app: qbtorrent
+    app: mediastack
 spec:
   type: NodePort
   selector:
-    app: qbtorrent
+    app: mediastack
   ports:
   - port: 8080
     targetPort: 8080

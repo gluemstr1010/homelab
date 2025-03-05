@@ -1,0 +1,33 @@
+apiVersion: cstor.openebs.io/v1
+kind: CStorPoolCluster
+metadata:
+ name: cstor-disk-pool
+ namespace: openebs
+spec:
+ pools:
+   - nodeSelector:
+       kubernetes.io/hostname: "talos-8uo-gs8"
+     dataRaidGroups:
+       - blockDevices:
+           - blockDeviceName: "blockdevice-154d474c6a8fd8f1780eae90bc961a2c"
+           - blockDeviceName: "blockdevice-da195dc6f5afd718fb48425b6efb84b1"
+     poolConfig:
+       dataRaidGroupType: "mirror"
+
+   - nodeSelector:
+       kubernetes.io/hostname: "talos-2yh-scj"
+     dataRaidGroups:
+       - blockDevices:
+           - blockDeviceName: "blockdevice-1748b56101f50872b96c7a95174a1e98"
+           - blockDeviceName: "blockdevice-947ec16fd47c059f56d9248a51b49845"
+     poolConfig:
+       dataRaidGroupType: "mirror"
+
+   - nodeSelector:
+       kubernetes.io/hostname: "talos-okv-lg4"
+     dataRaidGroups:
+       - blockDevices:
+           - blockDeviceName: "blockdevice-07328af0f427dca12d7fdec3dc6cd530"
+           - blockDeviceName: "blockdevice-59401d03ae5fbbf5a71e7ae88752054c"
+     poolConfig:
+       dataRaidGroupType: "mirror"

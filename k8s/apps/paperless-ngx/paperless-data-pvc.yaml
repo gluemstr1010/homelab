@@ -4,8 +4,8 @@ metadata:
   name: paperless-data
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: nfs-csi
+    - ReadWriteOnce
+  storageClassName: cstor-csi-disk
   resources:
     requests:
-      storage: 4Gi
+      storage: 20Gi

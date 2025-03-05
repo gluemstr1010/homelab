@@ -1,12 +1,13 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: paperless
   namespace: paperless
   labels:
     app: paperless
 spec:
-  replicas: 1
+  serviceName: paperless
+  replicas: 3
   selector:
     matchLabels:
       app: paperless
@@ -15,10 +16,6 @@ spec:
       labels:
         app: paperless
     spec:
-      volumes:
-        - name: paperless-data
-          persistentVolumeClaim:
-            claimName: paperless-data
       containers:
         - name: paperless
           image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -26,22 +23,23 @@ spec:
             - containerPort: 8000
           imagePullPolicy: Always
           volumeMounts:
-            - mountPath: "/data/data"
-              name: paperless-data
-            - mountPath: "/data/media"
-              name: paperless-data
-            - mountPath: "/data/consume"
-              name: paperless-data
-              
+            - mountPath: "/mnt/openebs-csi/paperless/data"
+              name: paperless-pvc
+            - mountPath: "/mnt/openebs-csi/paperless/media"
+              name: paperless-pvc
+            - mountPath: "/mnt/openebs-csi/paperless/consume"
+              name: paperless-pvc
           env:
             - name: PAPERLESS_REDIS
               value: "redis://redis:6379"
             - name: PAPERLESS_DATA_DIR
-              value: "/data/data"
+              value: "/mnt/openebs-csi/paperless/data"
             - name: PAPERLESS_MEDIA_ROOT
-              value: "/data/media"
+              value: "/mnt/openebs-csi/paperless/media"
             - name: PAPERLESS_CONSUMPTION_DIR
-              value: "/data/consume"
+              value: "/mnt/openebs-csi/paperless/consume"
+            - name: PAPERLESS_CONSUMER_POLLING
+              value: "10"
             - name: PAPERLESS_ADMIN_USER
               value: "root"
             - name: PAPERLESS_ADMIN_PASSWORD
@@ -52,3 +50,13 @@ spec:
               value: "0.0.0.0"
             - name: PAPERLESS_PORT
               value: "8000"
+
+  volumeClaimTemplates:
+    - metadata:
+        name: paperless-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 20Gi

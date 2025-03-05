@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mediastack
+  namespace: media
+  labels:
+    app: mediastack
+spec:
+  serviceName: mediastack
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mediastack
+  template:
+    metadata:
+      labels:
+        app: mediastack
+    spec: 
+      containers:
+        - name: prowlarr
+          image: linuxserver/prowlarr:latest
+          ports:
+            - containerPort: 9696
+          volumeMounts:
+            - name: prowlarr-pvc
+              mountPath: /config
+
+  volumeClaimTemplates:
+    - metadata:
+        name: prowlarr-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 5Gi

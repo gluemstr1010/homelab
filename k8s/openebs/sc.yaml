@@ -1,0 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    cas.openebs.io/config: |
+      - name: StorageType
+        value: "hostpath"
+      - name: BasePath
+        value: "/var/mnt/openebs"
+    meta.helm.sh/release-name: openebs
+    meta.helm.sh/release-namespace: openebs
+    openebs.io/cas-type: local
+  creationTimestamp: "2025-02-20T14:14:41Z"
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: openebs-hostpath
+  resourceVersion: "57695"
+  uid: 8aaac264-80e5-463b-9c28-c73097d49391
+provisioner: openebs.io/local
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer

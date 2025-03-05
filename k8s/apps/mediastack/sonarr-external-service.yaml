@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: sonarr-external
   labels:
-    app: sonarr
+    app: mediastack
 spec:
   type: NodePort
   selector:
-    app: sonarr
+    app: mediastack
   ports:
   - port: 8989
     targetPort: 8989

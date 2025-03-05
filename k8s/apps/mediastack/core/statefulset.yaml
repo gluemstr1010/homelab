@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mediastack
+  namespace: media
+  labels:
+    app: mediastack
+spec:
+  serviceName: mediastack
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mediastack
+  template:
+    metadata:
+      labels:
+        app: mediastack
+    spec: 
+      containers:
+        - name: prowlarr
+          image: linuxserver/prowlarr:latest
+          ports:
+            - containerPort: 9696
+          volumeMounts:
+            - name: mediastack-pvc
+              mountPath: /prowlarr
+              subPath: config
+        - name: radarr
+          image: linuxserver/radarr:latest
+          env:
+          - name: DB_TYPE
+            value: "postgresql"
+          - name: DB_HOST
+            value: "172.29.3.211"
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_NAME
+            value: "radarr_db"
+          - name: DB_USER
+            value: "media"
+          - name: DB_PASS
+            value: "Kolotoc12345"
+          ports:
+            - containerPort: 7878
+          volumeMounts:
+            - name: mediastack-pvc
+              mountPath: /radarr
+              subPath: config
+            - name: mediastack-pvc
+              mountPath: /Movies
+            - name: mediastack-pvc
+              mountPath: /Downloads
+        - name: sonarr
+          image: linuxserver/sonarr:latest
+          env:
+          - name: DB_TYPE
+            value: "postgresql"
+          - name: DB_HOST
+            value: "172.29.3.211"
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_NAME
+            value: "sonarr_db"
+          - name: DB_USER
+            value: "media"
+          - name: DB_PASS
+            value: "Kolotoc12345"
+          ports:
+            - containerPort: 8989
+          volumeMounts:
+            - name: mediastack-pvc
+              mountPath: "/sonarr"
+              subPath: config
+            - name: mediastack-pvc
+              mountPath: "/TV Shows"
+            - name: mediastack-pvc
+              mountPath: /Downloads
+        - name: qbtorrent
+          image: linuxserver/qbittorrent:latest
+          ports:
+            - containerPort: 8080
+              name: web-ui
+              protocol: TCP
+            - containerPort: 6881
+              name: torrent-tcp
+              protocol: TCP
+            - containerPort: 6881
+              name: torrent-udp
+              protocol: UDP
+          volumeMounts:
+            - name: mediastack-pvc
+              mountPath: /qbittorrent
+              subPath: config
+            - name: mediastack-pvc
+              mountPath: /Movies
+            - name: mediastack-pvc
+              mountPath: "/TV Shows"
+
+  volumeClaimTemplates:
+    - metadata:
+        name: mediastack-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 50Gi
