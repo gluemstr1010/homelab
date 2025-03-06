@@ -1,0 +1,10 @@
+kubeNodes:
+  - name: "kubenode1"
+    vmid: "103"
+    node: "proxmox1"
+  - name: "kubenode2"
+    vmid: "102"
+    node: "proxmox2"
+  - name: "kubenode3"
+    vmid: "101"
+    node: "proxmox3"
