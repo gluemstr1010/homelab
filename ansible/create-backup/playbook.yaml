@@ -1,4 +1,5 @@
-- hosts: localhost
+- name: VM Backup
+  hosts: localhost
   vars_files:
     - secrets.yml
   tasks:
@@ -11,14 +12,3 @@
         api_host: 172.16.0.2
         storage: local
         mode: all
-
-#- name: Backup all vms on node node2 to storage mypbs and wait for the task to finish
-#  community.general.proxmox_backup:
-#    api_user: {{ ansible-user }}
-#    api_password: {{ ansible-password }}
-#    api_host: {{ desired-node }}
-#    storage: local
-#    mode: all
-#    node: {{ desired-node }}
-#    wait: true
-#    wait_timeout: 30
