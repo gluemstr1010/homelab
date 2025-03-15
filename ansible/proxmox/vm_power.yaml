@@ -1,0 +1,51 @@
+- name: VM Power Managment
+  hosts: localhost
+  vars_files:
+    - secrets.yml
+    - vars.yaml
+  tasks:
+    - name: Start VMs
+      community.general.proxmox_kvm:
+        name: "{{ item.name }}"
+        api_user: "{{ apiuser }}"
+        api_password: "{{ apiuserpassword }}"
+        api_host: "{{ apihost }}"
+        state: stopped
+        vmid: "{{ item.vmid }}"
+        node: "{{ item.node }}"
+      loop: "{{ kubeNodes }}"
+      tags: startVMs
+
+    - name: Stop VMs
+      community.general.proxmox_kvm:
+        name: "{{ item.name }}"
+        api_user: "{{ apiuser }}"
+        api_password: "{{ apiuserpassword }}"
+        api_host: "{{ apihost }}"
+        state: stopped
+        vmid: "{{ item.vmid }}"
+        node: "{{ item.node }}"
+      loop: "{{ kubeNodes }}"
+      tags: stopVMs
+
+    - name: Start individual VM
+      community.general.proxmox_kvm:
+        name: "{{ item.name }}"
+        api_user: "{{ apiuser }}"
+        api_password: "{{ apiuserpassword }}"
+        api_host: "{{ apihost }}"
+        state: start
+        vmid: "{{ px_vmid }}"
+        node: "{{ px_node }}"
+      tags: startVM
+
+    - name: Stop individual VM
+      community.general.proxmox_kvm:
+        name: "{{ item.name }}"
+        api_user: "{{ apiuser }}"
+        api_password: "{{ apiuserpassword }}"
+        api_host: "{{ apihost }}"
+        state: stopped
+        vmid: "{{ px_vmid }}"
+        node: "{{ px_node }}"
+      tags: startVM

@@ -1,0 +1,59 @@
+- name: Post PDF
+  hosts: localhost
+  vars:
+    metadata_fields:
+      - Keywords
+      - CreationDate
+  tasks:
+    - name: Get PDFs from the folder
+      ansible.builtin.find:
+        paths: "./documents"
+        patterns: "*.pdf"
+      register: pdf_files
+
+    - name: Get pdf date
+      ansible.builtin.shell: |
+        set -o pipefail
+        pdfinfo "{{ item.path }}" | grep -E "^({{ metadata_fields | join('|') }}):" | sed 's/^ *//'
+      loop: "{{ pdf_files.files }}"
+      loop_control:
+        label: "{{ item.path }}"
+      register: pdf_metadata
+      changed_when: false
+
+    - name: Set variables for each PDF
+      ansible.builtin.set_fact:
+        pdf_data: "{{ pdf_data | default([]) + [ pdf_entry ] }}"
+      vars:
+        pdf_entry:
+          filename: "{{ item.item.path | default('') }}"
+          pdf_date: "{{ (item.stdout_lines | select('search', '^CreationDate:') | list | first | default('', true)
+                     | regex_replace('^CreationDate:\\s*', '')
+                     | regex_replace('\\s+[A-Za-z]+$', '') )
+                     | to_datetime('%a %b %d %H:%M:%S %Y') | string | regex_replace(' .*$', '') }}"
+          pdf_keyword: "{{ (item.stdout_lines | select('search', '^Keywords:') | list | first | default('', true)
+           | regex_replace('^Keywords:\\s*', '')) | default('', true) }}"
+      loop: "{{ pdf_metadata.results }}"
+
+    - name: Post PDFs to paperless
+      ansible.builtin.shell: |
+        set -o pipefail
+        curl -k -X POST "http://172.16.0.197:30036/api/documents/post_document/" \
+        -H "Authorization: Token {{ auth_token }}" \
+        -H "Content-Type: multipart/form-data" \
+        -F "document=@{{ item.filename | default('') }}" \
+        -F "created={{ item.pdf_date | default('') }}" \
+        # -F "tags={{ item.pdf_keyword | default('')}}"
+      loop: "{{ pdf_data }}"
+      register: curl
+      changed_when: false
+      when: pdf_data is defined and pdf_data | length > 0
+
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ curl }}"
+
+    # - name: Show extracted PDF dates
+    #   ansible.builtin.debug:
+    #     msg: "PDF: {{ item.item.path }} | Creation Date: {{ item.stdout }}"
+    #   loop: "{{ pdf_dates.results }}"

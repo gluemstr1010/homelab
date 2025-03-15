@@ -1,33 +1,28 @@
 apiVersion: cstor.openebs.io/v1
 kind: CStorPoolCluster
 metadata:
- name: cstor-disk-pool
- namespace: openebs
+  name: cstor-disk-pool
+  namespace: openebs
 spec:
- pools:
-   - nodeSelector:
-       kubernetes.io/hostname: "talos-8uo-gs8"
-     dataRaidGroups:
-       - blockDevices:
-           - blockDeviceName: "blockdevice-154d474c6a8fd8f1780eae90bc961a2c"
-           - blockDeviceName: "blockdevice-da195dc6f5afd718fb48425b6efb84b1"
-     poolConfig:
-       dataRaidGroupType: "mirror"
-
-   - nodeSelector:
-       kubernetes.io/hostname: "talos-2yh-scj"
-     dataRaidGroups:
-       - blockDevices:
-           - blockDeviceName: "blockdevice-1748b56101f50872b96c7a95174a1e98"
-           - blockDeviceName: "blockdevice-947ec16fd47c059f56d9248a51b49845"
-     poolConfig:
-       dataRaidGroupType: "mirror"
-
-   - nodeSelector:
-       kubernetes.io/hostname: "talos-okv-lg4"
-     dataRaidGroups:
-       - blockDevices:
-           - blockDeviceName: "blockdevice-07328af0f427dca12d7fdec3dc6cd530"
-           - blockDeviceName: "blockdevice-59401d03ae5fbbf5a71e7ae88752054c"
-     poolConfig:
-       dataRaidGroupType: "mirror"
+  pools:
+  - dataRaidGroups:
+    - blockDevices:
+      - blockDeviceName: blockdevice-f7c0237838f28ffdd95a5bc48b9cb6d8
+    nodeSelector:
+      kubernetes.io/hostname: talos-1fa-atv
+    poolConfig:
+      dataRaidGroupType: stripe
+  - dataRaidGroups:
+    - blockDevices:
+      - blockDeviceName: blockdevice-313a3c0d9de8db4a38c216f8d6c2bf9b
+    nodeSelector:
+      kubernetes.io/hostname: talos-92d-kv3
+    poolConfig:
+      dataRaidGroupType: stripe
+  - dataRaidGroups:
+    - blockDevices:
+      - blockDeviceName: blockdevice-4e222a31ca4af425f0d74f13cdad8f8a
+    nodeSelector:
+      kubernetes.io/hostname: talos-25o-tzu
+    poolConfig:
+      dataRaidGroupType: stripe

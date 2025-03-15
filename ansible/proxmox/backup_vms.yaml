@@ -1,0 +1,36 @@
+- name: VM Backup
+  hosts: localhost
+  vars_files:
+    - secrets.yml
+  tasks:
+    - name: Get timestamp from the system
+      ansible.builtin.shell: |
+        date +%Y-%m-%d%H-%M-%S
+      register: tstamp
+      changed_when: tstamp.stdout
+      tags: snapshotVM
+
+    - name: Set variables
+      ansible.builtin.set_fact:
+        snapshot_name: "VM{{ px_vmid }}-{{ tstamp.stdout[0:10] }}"
+      tags: snapshotVM
+    # - name: Backup all vms in the Proxmox cluster to storage mypbs
+    #   community.general.proxmox_backup:
+    #     api_user: "{{ apiuser }}"
+    #     # api_token_id: "{{ ansibletokenid }}"
+    #     # api_token_secret: "{{ ansibletokensecret }}"
+    #     api_password: "{{ apiuserpassword }}"
+    #     api_host: "{{ apihost }}"
+    #     storage: local
+    #     mode: all
+    #   tags: backupVMs
+
+    - name: Snapshot VM
+      community.general.proxmox_snap:
+        api_user: "{{ apiuser }}"
+        api_password: "{{ apiuserpassword }}"
+        api_host: "{{ apihost }}"
+        vmid: "{{ px_vmid }}"
+        state: present
+        snapname: "{{ snapshot_name }}"
+      tags: snapshotVM

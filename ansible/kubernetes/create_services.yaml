@@ -1,0 +1,65 @@
+- name: Create Services
+  hosts: localhost
+  tasks:
+    - name: Create ClusterIP
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: "{{ app_name }}-service"
+            namespace: "{{ app_name }}"
+            labels:
+              app: "{{ app_name }}"
+          spec:
+            selector:
+              app: "{{ app_name }}"
+            ports:
+              - protocol: TCP
+                port: 80
+                targetPort: "{{ target_port }}"
+            type: ClusterIP
+      tags: clusterip
+
+    - name: Create NodePort
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: "{{ app_name }}-nodeport"
+            namespace: "{{ app_name }}"
+            labels:
+              app: "{{ app_name }}"
+          spec:
+            selector:
+              app: "{{ app_name }}"
+            ports:
+              - protocol: TCP
+                port: "{{ target_port }}"
+                targetPort: "{{ target_port }}"
+            type: NodePort
+      tags: nodeport
+
+    - name: Create LoadBalancer
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: "{{ app_name }}-service"
+            namespace: "{{ app_name }}"
+            labels:
+              app: "{{ app_name }}"
+          spec:
+            selector:
+              app: "{{ app_name }}"
+            ports:
+              - protocol: TCP
+                port: "{{ target_port }}"
+                targetPort: "{{ target_port }}"
+            type: LoadBalancer
+      tags: loadbalancer

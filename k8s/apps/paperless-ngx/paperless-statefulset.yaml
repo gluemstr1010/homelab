@@ -23,21 +23,21 @@ spec:
             - containerPort: 8000
           imagePullPolicy: Always
           volumeMounts:
-            - mountPath: "/mnt/openebs-csi/paperless/data"
-              name: paperless-pvc
-            - mountPath: "/mnt/openebs-csi/paperless/media"
-              name: paperless-pvc
-            - mountPath: "/mnt/openebs-csi/paperless/consume"
-              name: paperless-pvc
+            - mountPath: "/data"
+              name: paperless-data
+            - mountPath: "/media"
+              name: paperless-media
+            - mountPath: "/consume"
+              name: paperless-consume
           env:
             - name: PAPERLESS_REDIS
               value: "redis://redis:6379"
             - name: PAPERLESS_DATA_DIR
-              value: "/mnt/openebs-csi/paperless/data"
+              value: "/data"
             - name: PAPERLESS_MEDIA_ROOT
-              value: "/mnt/openebs-csi/paperless/media"
+              value: "/media"
             - name: PAPERLESS_CONSUMPTION_DIR
-              value: "/mnt/openebs-csi/paperless/consume"
+              value: "/consume"
             - name: PAPERLESS_CONSUMER_POLLING
               value: "10"
             - name: PAPERLESS_ADMIN_USER
@@ -53,10 +53,28 @@ spec:
 
   volumeClaimTemplates:
     - metadata:
-        name: paperless-pvc
+        name: paperless-data
       spec:
         accessModes: ["ReadWriteOnce"]
         storageClassName: cstor-csi-disk
         resources:
           requests:
             storage: 20Gi
+
+    - metadata:
+        name: paperless-media
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 10Gi
+
+    - metadata:
+        name: paperless-consume
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 5Gi

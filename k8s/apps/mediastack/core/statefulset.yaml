@@ -15,16 +15,16 @@ spec:
     metadata:
       labels:
         app: mediastack
-    spec: 
+    spec:
       containers:
         - name: prowlarr
           image: linuxserver/prowlarr:latest
           ports:
             - containerPort: 9696
           volumeMounts:
-            - name: mediastack-pvc
-              mountPath: /prowlarr
-              subPath: config
+            - name: prowlarr-pvc
+              mountPath: /config
+              subPath: prowlarr
         - name: radarr
           image: linuxserver/radarr:latest
           env:
@@ -43,12 +43,12 @@ spec:
           ports:
             - containerPort: 7878
           volumeMounts:
-            - name: mediastack-pvc
-              mountPath: /radarr
-              subPath: config
-            - name: mediastack-pvc
+            - name: radarr-pvc
+              mountPath: /config
+              subPath: radarr
+            - name: media-pvc
               mountPath: /Movies
-            - name: mediastack-pvc
+            - name: media-pvc
               mountPath: /Downloads
         - name: sonarr
           image: linuxserver/sonarr:latest
@@ -68,15 +68,18 @@ spec:
           ports:
             - containerPort: 8989
           volumeMounts:
-            - name: mediastack-pvc
-              mountPath: "/sonarr"
-              subPath: config
-            - name: mediastack-pvc
+            - name: sonarr-pvc
+              mountPath: "/config"
+              subPath: sonarr
+            - name: media-pvc
               mountPath: "/TV Shows"
-            - name: mediastack-pvc
+            - name: media-pvc
               mountPath: /Downloads
         - name: qbtorrent
           image: linuxserver/qbittorrent:latest
+          envFrom:
+            - configMapRef:
+                name: qbtorrent-configmap
           ports:
             - containerPort: 8080
               name: web-ui
@@ -88,20 +91,56 @@ spec:
               name: torrent-udp
               protocol: UDP
           volumeMounts:
-            - name: mediastack-pvc
-              mountPath: /qbittorrent
-              subPath: config
-            - name: mediastack-pvc
+            - name: qbittorrent-pvc
+              mountPath: /config
+              subPath: qbittorent
+            - name: media-pvc
               mountPath: /Movies
-            - name: mediastack-pvc
+            - name: media-pvc
               mountPath: "/TV Shows"
 
   volumeClaimTemplates:
     - metadata:
-        name: mediastack-pvc
+        name: media-pvc
       spec:
         accessModes: ["ReadWriteOnce"]
         storageClassName: cstor-csi-disk
         resources:
           requests:
-            storage: 50Gi
+            storage: 100Gi
+
+    - metadata:
+        name: prowlarr-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 10Gi
+
+    - metadata:
+        name: radarr-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 10Gi
+
+    - metadata:
+        name: sonarr-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 10Gi
+
+    - metadata:
+        name: qbittorrent-pvc
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: cstor-csi-disk
+        resources:
+          requests:
+            storage: 10Gi
