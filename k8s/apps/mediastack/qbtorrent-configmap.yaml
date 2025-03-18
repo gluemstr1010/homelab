@@ -7,6 +7,6 @@ data:
   qBittorrent.conf: |
     [Preferences]
     WebUI\Username=admin
-    WebUI\Password=adminadmin
+    WebUI\Password=f6fdffe48c908deb0f4c3bd36c032e72
     WebUI\Port=8080
     WebUI\HostHeaderValidation=false

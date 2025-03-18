@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sodarr-configmap
+  namespace: media
+  labels:
+    app: mediastack
+data:
+  DB_TYPE: "postgresql"
+  DB_HOST: "172.29.3.211"
+  DB_PORT: "5432"
+  DB_NAME: "sonarr_db"
+  DB_USER: "media"
+  DB_PASS: "Kolotoc12345"
+
