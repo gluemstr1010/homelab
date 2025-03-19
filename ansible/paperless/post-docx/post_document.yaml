@@ -38,7 +38,7 @@
     - name: Post PDFs to paperless
       ansible.builtin.shell: |
         set -o pipefail
-        curl -k -X POST "http://172.16.0.197:30036/api/documents/post_document/" \
+        curl -k -X POST "https://paperless.homelab.org/api/documents/post_document/" \
         -H "Authorization: Token {{ auth_token }}" \
         -H "Content-Type: multipart/form-data" \
         -F "document=@{{ item.filename | default('') }}" \
