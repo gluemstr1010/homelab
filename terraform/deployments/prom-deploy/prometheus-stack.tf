@@ -6,7 +6,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.12.0" # Ensure you define Helm provider version
+      version = "2.12.0"
     }
   }
 }

@@ -7,22 +7,22 @@ spec:
   pools:
   - dataRaidGroups:
     - blockDevices:
-      - blockDeviceName: blockdevice-9baec796c5d9d263013fafbbb640bd8f
+      - blockDeviceName: blockdevice-43d3581a48f5efddbf810b0922376ea2
     nodeSelector:
-      kubernetes.io/hostname: talos-1fa-atv
+      kubernetes.io/hostname: talos-lh1-dpg
     poolConfig:
       dataRaidGroupType: stripe
   - dataRaidGroups:
     - blockDevices:
-      - blockDeviceName: blockdevice-efdf68e2ef7b70f1ea3cb7317df12b4c
+      - blockDeviceName: blockdevice-eebbc8eaf74a21f5a5df619c5349dfa7
     nodeSelector:
-      kubernetes.io/hostname: talos-92d-kv3
+      kubernetes.io/hostname: talos-3bv-so4
     poolConfig:
       dataRaidGroupType: stripe
   - dataRaidGroups:
     - blockDevices:
-      - blockDeviceName: blockdevice-230d9cf1dd4287fc15e416d1b0bb32e2 
+      - blockDeviceName: blockdevice-cc62019663dc274248d6bc3a66b90ec4 
     nodeSelector:
-      kubernetes.io/hostname: talos-25o-tzu
+      kubernetes.io/hostname: talos-63w-tp7
     poolConfig:
       dataRaidGroupType: stripe

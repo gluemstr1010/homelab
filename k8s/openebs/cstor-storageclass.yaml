@@ -8,5 +8,5 @@ parameters:
   cas-type: cstor
   # cstorPoolCluster should have the name of the CSPC
   cstorPoolCluster: cstor-disk-pool
-  # replicaCount should be <= no. of CSPI created in the selected CSPC
-  replicaCount: "2"
+  replicaCount: "1"
+volumeBindingMode: WaitForFirstConsumer

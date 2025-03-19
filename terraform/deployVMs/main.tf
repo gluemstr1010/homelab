@@ -45,17 +45,17 @@ resource "proxmox_vm_qemu" "vm1" {
       }
       scsi1 {
         disk {
-            size        = "100G"           # Size of the additional disk
-            storage     = "labstoragecluster"     # Replace with your Ceph pool name
-            format      = "qcow2"           # Use qcow2 format for better performance
+            size        = "100G"
+            storage     = "labstoragecluster"
+            format      = "qcow2"
             discard     = false   
         } 
       }
       scsi2 {
         disk {
-            size        = "100G"           # Size of the additional disk
-            storage     = "labstoragecluster"     # Replace with your Ceph pool name
-            format      = "qcow2"           # Use qcow2 format for better performance
+            size        = "100G"
+            storage     = "labstoragecluster"
+            format      = "qcow2"
             discard     = false   
         } 
       }
@@ -90,25 +90,25 @@ resource "proxmox_vm_qemu" "vm2" {
     scsi {
       scsi0 {
         disk {
-          size        = "100G"           # Size of the additional disk
-          storage     = "labstoragessd"     # Replace with your Ceph pool name
-          format      = "qcow2"           # Use qcow2 format for better performance
+          size        = "100G"
+          storage     = "labstoragessd"
+          format      = "qcow2" 
           discard     = false  
         } 
       }
       scsi1 {
         disk {
-            size        = "100G"           # Size of the additional disk
-            storage     = "labstoragecluster"     # Replace with your Ceph pool name
-            format      = "qcow2"           # Use qcow2 format for better performance
+            size        = "100G"
+            storage     = "labstoragecluster"
+            format      = "qcow2"
             discard     = false    
         } 
       }
       scsi2 {
         disk {
-            size        = "100G"           # Size of the additional disk
-            storage     = "labstoragecluster"     # Replace with your Ceph pool name
-            format      = "qcow2"           # Use qcow2 format for better performance
+            size        = "100G"
+            storage     = "labstoragecluster"
+            format      = "qcow2"
             discard     = false   
         } 
       }
@@ -143,25 +143,25 @@ resource "proxmox_vm_qemu" "vm3" {
     scsi {
         scsi0 {
           disk{
-            size        = "100G"           # Size of the additional disk
-            storage     = "labstoragessd"     # Replace with your Ceph pool name
-            format      = "qcow2"           # Use qcow2 format for better performance
+            size        = "100G"
+            storage     = "labstoragessd"
+            format      = "qcow2"
             discard     = false  
           }   
       }
       scsi1 {
         disk {
-            size        = "100G"           # Size of the additional disk
-            storage     = "labstoragecluster"     # Replace with your Ceph pool name
-            format      = "qcow2"           # Use qcow2 format for better performance
+            size        = "100G"
+            storage     = "labstoragecluster"
+            format      = "qcow2"
             discard     = false    
         } 
       }
       scsi2 {
         disk {
-            size        = "100G"           # Size of the additional disk
-            storage     = "labstoragecluster"     # Replace with your Ceph pool name
-            format      = "qcow2"           # Use qcow2 format for better performance
+            size        = "100G"
+            storage     = "labstoragecluster" 
+            format      = "qcow2"           
             discard     = false   
         } 
       }

@@ -14,16 +14,17 @@
       ansible.builtin.set_fact:
         snapshot_name: "VM{{ px_vmid }}-{{ tstamp.stdout[0:10] }}"
       tags: snapshotVM
-    # - name: Backup all vms in the Proxmox cluster to storage mypbs
-    #   community.general.proxmox_backup:
-    #     api_user: "{{ apiuser }}"
-    #     # api_token_id: "{{ ansibletokenid }}"
-    #     # api_token_secret: "{{ ansibletokensecret }}"
-    #     api_password: "{{ apiuserpassword }}"
-    #     api_host: "{{ apihost }}"
-    #     storage: local
-    #     mode: all
-    #   tags: backupVMs
+      
+    - name: Backup all vms in the Proxmox cluster to storage mypbs
+      community.general.proxmox_backup:
+        api_user: "{{ apiuser }}"
+        # api_token_id: "{{ ansibletokenid }}"
+        # api_token_secret: "{{ ansibletokensecret }}"
+        api_password: "{{ apiuserpassword }}"
+        api_host: "{{ apihost }}"
+        storage: local
+        mode: all
+      tags: backupVMs
 
     - name: Snapshot VM
       community.general.proxmox_snap:
