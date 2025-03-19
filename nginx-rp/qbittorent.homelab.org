@@ -1,0 +1,30 @@
+ 
+server {
+    listen 80;
+    listen [::]:80;
+    server_name qbittorrent.homelab.org;
+    return 301 https://$host$request_uri;
+
+}
+ 
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    
+    server_name qbittorrent.homelab.org;
+    ssl_certificate /etc/nginx/ssl/certs/qbittorrent.homelab.org.crt;
+    ssl_certificate_key /etc/nginx/ssl/keys/qbittorrent.homelab.org.key;
+
+    proxy_redirect off;
+
+    location / {
+      proxy_pass http://172.16.0.197:31883;
+      proxy_set_header   X-Forwarded-Host  $host:$server_port;
+      proxy_hide_header  Referer;
+      proxy_hide_header  Origin;
+      proxy_set_header   Referer           '';
+      proxy_set_header   Origin            '';
+
+    }
+
+}

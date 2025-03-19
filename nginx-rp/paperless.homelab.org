@@ -1,0 +1,33 @@
+ 
+server {
+    listen 80;
+    listen [::]:80;
+    server_name paperless.homelab.org;
+    return 301 https://$host$request_uri;
+
+}
+ 
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    
+    server_name paperless.homelab.org;
+    ssl_certificate /etc/nginx/ssl/certs/paperless.homelab.org.crt;
+    ssl_certificate_key /etc/nginx/ssl/keys/paperless.homelab.org.key;
+
+    location / {
+
+            proxy_pass http://paperless.homelab.org;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Host $server_name;
+            add_header Referrer-Policy "strict-origin-when-cross-origin";
+    }
+
+}
